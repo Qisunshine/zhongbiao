@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>clock</title>
+</head>
+   <style>
+      #ctx{
+      	margin:0 auto;
+      	display: block;
+      	/*border:1px solid #000;*/
+
+      }
+   </style>
+<body>
+	 <canvas id="ctx" width="600" height="600">
+
+	 </canvas>
+	 <script>
+	 	var canvas = document.querySelector('#ctx');
+	 	console.log(canvas)
+	 	var ctx = canvas.getContext('2d');
+	 	var drawclock = function(){
+	 	var img = new Image();
+	 	img.src = '1.png';
+	 	img.onload = function(){
+	 		var imgs = ctx.createPattern(img,'no-repeat');
+	 		ctx.fillStyle = imgs;
+	 		ctx.drawImage(img,-153,0,900,600)
+            var r = function(deg){
+            	return (Math.PI/180)*deg;
+            }
+            // 圆心
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(300,300);
+            ctx.arc(0,0,5,0,(Math.PI/180)*360);
+            ctx.fillStyle = '#ADE383';
+            ctx.fill();
+            ctx.closePath();
+            // ctx.restore();
+            //时分秒钟
+            var now = new Date();
+            var h = now.getHours();
+            var m = now.getMinutes();
+            var s = now.getSeconds();
+            var deg = 360*((h*60*60+m*60+s)/43200);
+            ctx.save();
+            ctx.beginPath();
+            ctx.rotate(r(deg));
+            ctx.moveTo(0,5);
+            ctx.lineTo(0,10);
+            ctx.moveTo(0,-5);
+            ctx.lineTo(0,-55);
+            ctx.lineWidth = 7.5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+            ctx.restore();
+            // ctx.closePath();
+
+            //分钟
+            var m =now.getMinutes();
+            var s =now.getSeconds();
+            var deg = 360*((m*60+s)/3600);
+            ctx.save();
+            ctx.beginPath();
+            ctx.rotate(r(deg));
+            ctx.moveTo(0,5);
+            ctx.lineTo(0,-15);
+            ctx.lineCap = 'round';
+            ctx.moveTo(0,-5);
+            ctx.lineTo(0,-85);
+            ctx.lineWidth = 7.5;
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+            // 秒针
+            var s = now.getSeconds();
+            ctx.save();
+            ctx.beginPath();
+            ctx.rotate(r(s*6));
+            ctx.moveTo(0,5);
+            ctx.lineTo(0,130);
+            ctx.moveTo(0,-5);
+            ctx.lineTo(0,-15);
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = '#ADE383'
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+            ctx.restore();
+	 	}
+	}
+	drawclock();
+	setInterval(drawclock,1000)
+	 </script>
+</body>
+</html>
